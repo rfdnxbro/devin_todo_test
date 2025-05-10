@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 
 interface Todo {
   id: string;
@@ -57,52 +60,57 @@ export default function TodoApp() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">TODO App</h1>
+    <Card className="max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">TODO App</CardTitle>
+      </CardHeader>
       
-      <div className="flex mb-4">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={handleCompositionEnd}
-          placeholder="Add a new todo..."
-          className="flex-grow px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          data-testid="todo-input"
-        />
-        <button
-          onClick={handleAddTodo}
-          disabled={!inputValue.trim()}
-          className="px-4 py-2 bg-blue-500 text-white rounded-r-lg disabled:bg-blue-300 disabled:cursor-not-allowed hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          data-testid="add-button"
-        >
-          Add
-        </button>
-      </div>
-
-      <ul className="space-y-2" data-testid="todo-list">
-        {todos.map((todo) => (
-          <li 
-            key={todo.id} 
-            className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700 rounded-lg"
+      <CardContent>
+        <div className="flex gap-2 mb-6">
+          <Input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
+            placeholder="Add a new todo..."
+            className="flex-grow rounded-r-none"
+            data-testid="todo-input"
+          />
+          <Button
+            onClick={handleAddTodo}
+            disabled={!inputValue.trim()}
+            className="rounded-l-none"
+            data-testid="add-button"
           >
-            <span className="break-words flex-grow mr-4">{todo.text}</span>
-            <button
-              onClick={() => handleCompleteTodo(todo.id)}
-              className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-              data-testid="complete-button"
-            >
-              Complete
-            </button>
-          </li>
-        ))}
-      </ul>
+            Add
+          </Button>
+        </div>
+
+        <div className="space-y-3" data-testid="todo-list">
+          {todos.map((todo) => (
+            <Card key={todo.id} className="flex justify-between items-center p-3">
+              <span className="break-words flex-grow mr-4">{todo.text}</span>
+              <Button
+                onClick={() => handleCompleteTodo(todo.id)}
+                variant="outline"
+                size="sm"
+                className="text-green-500 border-green-500 hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-950"
+                data-testid="complete-button"
+              >
+                Complete
+              </Button>
+            </Card>
+          ))}
+        </div>
+      </CardContent>
       
       {todos.length === 0 && (
-        <p className="text-center text-gray-500 dark:text-gray-400 mt-4">No todos yet. Add one above!</p>
+        <CardFooter>
+          <p className="text-center text-muted-foreground w-full">No todos yet. Add one above!</p>
+        </CardFooter>
       )}
-    </div>
+    </Card>
   );
 }
