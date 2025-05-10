@@ -70,6 +70,26 @@ describe('TodoApp', () => {
     expect(screen.getByText('New Todo')).toBeInTheDocument();
     expect(input).toHaveValue('');
   });
+  
+  test('should not add a new todo when Enter key is pressed during IME composition', () => {
+    render(<TodoApp />);
+    
+    const input = screen.getByTestId('todo-input');
+    
+    fireEvent.change(input, { target: { value: 'New Todo' } });
+    
+    fireEvent.compositionStart(input);
+    
+    fireEvent.keyDown(input, { key: 'Enter' });
+    
+    expect(screen.queryByText('New Todo')).not.toBeInTheDocument();
+    
+    fireEvent.compositionEnd(input);
+    
+    fireEvent.keyDown(input, { key: 'Enter' });
+    
+    expect(screen.getByText('New Todo')).toBeInTheDocument();
+  });
 
   test('should remove a todo when complete button is clicked', () => {
     render(<TodoApp />);
